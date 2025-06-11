@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogsphere - Your Blogging Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-light: #81C784;
+            --primary-dark: #388E3C;
+            --secondary-color: #2196F3;
+            --accent-color: #FF9800;
+            --text-color: #333;
+            --text-light: #666;
+            --bg-color: #f1f8e9;
+            --card-bg: #ffffff;
+            --error-color: #f44336;
+            --success-color: #4CAF50;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg-color) 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+            padding: 20px;
+            transition: var(--transition);
+        }
+        
+        /* Header Styles */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 15px 30px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .logo i {
+            color: var(--primary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+        
+        nav a:hover, nav a.active {
+            background: var(--primary-light);
+            color: white;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        /* Container Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .page {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+            min-height: 500px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .page-header {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Auth Page */
+        .auth-container {
+            max-width: 450px;
+            margin: 30px auto;
+            position: relative;
+        }
+        
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+            border-radius: 6px 6px 0 0;
+        }
+        
+        .form-title {
+            font-size: 26px;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary-light);
+            border-radius: 3px;
+        }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 14px 14px 14px 45px;
+            margin-bottom: 5px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        textarea {
+            min-height: 200px;
+            padding: 15px;
+            resize: vertical;
+        }
+        
+        input:focus, textarea:focus {
+            border-color: var(--primary-light);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(129, 199, 132, 0.3);
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9e9e9e;
+            font-size: 18px;
+        }
+        
+        .error-message {
+            color: var(--error-color);
+            font-size: 14px;
+            text-align: left;
+            margin-bottom: 15px;
+            display: none;
+            background: rgba(244, 67, 54, 0.1);
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+        
+        .btn {
+            padding: 14px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #0b7dda;
+        }
+        
+        .btn-accent {
+            background-color: var(--accent-color);
+        }
+        
+        .btn-accent:hover {
+            background-color: #e68a00;
+        }
+        
+        .switch {
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+        
+        .switch:hover {
+            color: var(--primary-color);
+        }
+        
+        /* Dashboard */
+        .welcome-message {
+            font-size: 22px;
+            margin-bottom: 25px;
+            color: var(--primary-dark);
+            text-align: center;
+        }
+        
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+        
+        .stat-text h3 {
+            font-size: 28px;
+            color: var(--primary-dark);
+        }
+        
+        .stat-text p {
+            color: var(--text-light);
+        }
+        
+        /* Blog List */
+        .blog-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .blog-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .blog-img {
+            height: 180px;
+            background: linear-gradient(45deg, var(--primary-light), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .blog-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .blog-author {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .blog-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+        
+        .blog-excerpt {
+            color: var(--text-color);
+            margin-bottom: 15px;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+        
+        .blog-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .action-btn.edit {
+            background: rgba(33, 150, 243, 0.1);
+            color: var(--secondary-color);
+        }
+        
+        .action-btn.delete {
+            background: rgba(244, 67, 54, 0.1);
+            color: var(--error-color);
+        }
+        
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            gap: 10px;
+        }
+        
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card-bg);
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .page-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .page-btn:hover:not(.active) {
+            background: var(--primary-light);
+            color: white;
+        }
+        
+        /* Blog Detail */
+        .blog-detail {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .blog-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .blog-detail-title {
+            font-size: 36px;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+        
+        .blog-detail-meta {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .blog-detail-content {
+            line-height: 1.8;
+            font-size: 18px;
+        }
+        
+        .blog-detail-content p {
+            margin-bottom: 20px;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            color: var(--text-light);
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        /* Theme Switcher */
+        .theme-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            z-index: 100;
+        }
+        
+        /* Dark Theme */
+        body.dark-theme {
+            --primary-color: #66BB6A;
+            --primary-light: #81C784;
+            --primary-dark: #388E3C;
+            --text-color: #f5f5f5;
+            --text-light: #b0b0b0;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            background: linear-gradient(135deg, #1a2a1a 0%, #121212 100%);
+        }
+        
+        body.dark-theme header {
+            background: rgba(30, 30, 30, 0.95);
+        }
+        
+        body.dark-theme .page {
+            background: rgba(30, 30, 30, 0.95);
+        }
+        
+        body.dark-theme .stat-card {
+            background: #252525;
+        }
+        
+        body.dark-theme .blog-card {
+            background: #252525;
+        }
+        
+        body.dark-theme input,
+        body.dark-theme textarea {
+            background: #252525;
+            border-color: #444;
+            color: #f5f5f5;
+        }
+        
+        /* Search Container */
+        .search-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .search-input {
+            flex-grow: 1;
+            position: relative;
+        }
+        
+        /* Like Button */
+        .like-btn {
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        
+        .like-btn:hover {
+            background: rgba(244, 67, 54, 0.1);
+        }
+        
+        .like-btn.liked {
+            color: var(--error-color);
+        }
+        
+        .like-btn.liked i {
+            font-weight: 900;
+        }
+        
+        .like-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .blog-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .blog-detail-title {
+                font-size: 28px;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-switcher" id="themeSwitcher">
+        <i class="fas fa-moon"></i>
+    </div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo" onclick="showPage('home')">
+                <i class="fas fa-blog"></i>
+                <span>Blogsphere</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="public">Explore</a></li>
+                    <li><a href="#" class="nav-link" data-page="dashboard">Dashboard</a></li>
+                    <li><a href="#" class="nav-link" data-page="create">Create</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <button id="loginBtn" class="btn btn-secondary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <button id="logoutBtn" class="btn" style="display:none;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+        
+        <!-- Home Page (Public Blogs) -->
+        <section id="homePage" class="page active">
+            <div class="page-header">
+                <h2 class="page-title">
+                    <i class="fas fa-home"></i> Latest Blogs
+                </h2>
+                <div>
+                    <button class="btn btn-accent" id="createBlogBtn">
+                        <i class="fas fa-plus"></i> Create Blog
+                    </button>
+                </div>
+            </div>
+            
+            <div class="blog-list" id="homeBlogList">
+                <!-- Blog cards will be populated by JS -->
+            </div>
+            
+            <div class="pagination">
+                <div class="page-btn active">1</div>
+                <div class="page-btn">2</div>
+                <div class="page-btn">3</div>
+                <div class="page-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Auth Page -->
+        <section id="authPage" class="page">
+            <div class="auth-container">
+                <h2 class="form-title" id="formTitle">Login to your account</h2>
+                
+                <form id="authForm">
+                    <!-- Login form by default -->
+                    <div id="loginFields">
+                        <div class="input-group">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" id="loginEmail" placeholder="Email" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="loginPassword" placeholder="Password" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Register fields (hidden by default) -->
+                    <div id="registerFields" style="display: none;">
+                        <div class="input-group">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="registerUsername" placeholder="Username" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" id="registerEmail" placeholder="Email" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="registerPassword" placeholder="Password" required>
+                        </div>
+                    </div>
+                    
+                    <div id="authError" class="error-message"></div>
+                    
+                    <button type="submit" class="btn btn-block" id="submitBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </form>
+                
+                <div class="switch" id="switchForm">Don't have an account? Register</div>
+            </div>
+        </section>
+        
+        <!-- Dashboard Page -->
+        <section id="dashboardPage" class="page">
+            <div class="page-header">
+                <h2 class="page-title">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </h2>
+            </div>
+            
+            <div class="welcome-message" id="welcomeMessage">
+                Welcome back, User!
+            </div>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-text">
+                        <h3 id="totalBlogs">0</h3>
+                        <p>Total Blogs</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="stat-text">
+                        <h3 id="totalViews">0</h3>
+                        <p>Total Views</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div class="stat-text">
+                        <h3 id="totalLikes">0</h3>
+                        <p>Total Likes</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-header">
+                <h3 class="page-title">
+                    <i class="fas fa-pen"></i> Your Recent Blogs
+                </h3>
+            </div>
+            
+            <div class="blog-list" id="dashboardBlogList">
+                <!-- User's blogs will be populated by JS -->
+            </div>
+        </section>
+        
+        <!-- Create Blog Page -->
+        <section id="createBlogPage" class="page">
+            <div class="page-header">
+                <h2 class="page-title">
+                    <i class="fas fa-plus-circle"></i> Create New Blog
+                </h2>
+            </div>
+            
+            <form id="blogForm" style="max-width: 800px; margin: 0 auto;">
+                <div class="input-group">
+                    <i class="fas fa-heading input-icon"></i>
+                    <input type="text" id="blogTitle" placeholder="Blog Title" required>
+                </div>
+                
+                <div class="input-group">
+                    <i class="fas fa-image input-icon"></i>
+                    <input type="text" id="blogImage" placeholder="Image URL (optional)">
+                </div>
+                
+                <div class="input-group">
+                    <i class="fas fa-align-left input-icon"></i>
+                    <textarea id="blogContent" placeholder="Write your blog content here..." required></textarea>
+                </div>
+                
+                <div id="blogError" class="error-message"></div>
+                
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i> Publish Blog
+                    </button>
+                    <button type="button" id="cancelCreate" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </form>
+        </section>
+        
+        <!-- Blog Detail Page -->
+        <section id="blogDetailPage" class="page">
+            <div class="blog-detail">
+                <div class="blog-header">
+                    <h1 class="blog-detail-title" id="detailTitle">The Future of Sustainable Technology</h1>
+                    <div class="blog-detail-meta" id="detailMeta">
+                        <span><i class="fas fa-user"></i> Alex Johnson</span>
+                        <span><i class="fas fa-calendar"></i> June 15, 2023</span>
+                        <span><i class="fas fa-clock"></i> 5 min read</span>
+                    </div>
+                </div>
+                
+                <div class="blog-detail-content" id="detailContent">
+                    <!-- Content will be populated by JS -->
+                </div>
+                
+                <div class="like-container">
+                    <button class="like-btn" id="likeDetailBtn">
+                        <i class="far fa-heart"></i> 
+                        <span id="likeCount">0</span> likes
+                    </button>
+                    
+                    <div class="blog-actions" id="detailActions">
+                        <button class="action-btn edit" id="editBlogBtn">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn delete" id="deleteBlogBtn">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                        <button class="btn btn-secondary" id="backToList">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Public Blog Listing -->
+        <section id="publicBlogsPage" class="page">
+            <div class="page-header">
+                <h2 class="page-title">
+                    <i class="fas fa-globe-americas"></i> Explore Blogs
+                </h2>
+            </div>
+            
+            <div class="search-container">
+                <div class="input-group" style="flex-grow: 1;">
+                    <i class="fas fa-search input-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search blogs...">
+                </div>
+                <button class="btn" id="searchBtn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+            
+            <div class="blog-list" id="publicBlogList">
+                <!-- Public blog cards will be populated by JS -->
+            </div>
+            
+            <div class="pagination">
+                <div class="page-btn active">1</div>
+                <div class="page-btn">2</div>
+                <div class="page-btn">3</div>
+                <div class="page-btn">4</div>
+                <div class="page-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Blogsphere. All rights reserved. | Created with <i class="fas fa-heart" style="color: #f44336;"></i> for bloggers</p>
+    </footer>
+    
+    <script>
+        // Page Management
+        const pages = {
+            home: document.getElementById('homePage'),
+            auth: document.getElementById('authPage'),
+            dashboard: document.getElementById('dashboardPage'),
+            create: document.getElementById('createBlogPage'),
+            detail: document.getElementById('blogDetailPage'),
+            public: document.getElementById('publicBlogsPage')
+        };
+        
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        // Theme switcher
+        const themeSwitcher = document.getElementById('themeSwitcher');
+        
+        // Data storage
+        let currentUser = null;
+        let blogs = [];
+        let users = [];
+        let currentBlog = null;
+        
+        // Initialize page
+        function initPage() {
+            // Load data from localStorage
+            loadData();
+            
+            // Set event listeners
+            setupEventListeners();
+            
+            // Show home page by default
+            showPage('home');
+            
+            // Render blog lists
+            renderBlogList('#homeBlogList', blogs);
+            renderBlogList('#publicBlogList', blogs);
+            
+            // Update dashboard stats
+            updateDashboardStats();
+            
+            // Theme switcher
+            themeSwitcher.addEventListener('click', toggleTheme);
+            
+            // Check if user is logged in
+            if (currentUser) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'block';
+                document.getElementById('welcomeMessage').textContent = `Welcome back, ${currentUser.name}!`;
+                renderBlogList('#dashboardBlogList', blogs.filter(blog => blog.authorId === currentUser.id));
+            }
+        }
+        
+        // Load data from localStorage
+        function loadData() {
+            // Load users
+            const storedUsers = localStorage.getItem('blogUsers');
+            if (storedUsers) {
+                users = JSON.parse(storedUsers);
+            } else {
+                // Default users
+                users = [
+                    { id: 1, name: "Alex Johnson", email: "alex@example.com", password: "pass123" },
+                    { id: 2, name: "Sarah Williams", email: "sarah@example.com", password: "pass123" }
+                ];
+                localStorage.setItem('blogUsers', JSON.stringify(users));
+            }
+            
+            // Load blogs - start with empty array
+            const storedBlogs = localStorage.getItem('blogs');
+            if (storedBlogs) {
+                blogs = JSON.parse(storedBlogs);
+            } else {
+                blogs = [];
+                localStorage.setItem('blogs', JSON.stringify(blogs));
+            }
+            
+            // Load current user
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+            }
+            
+            // Load theme
+            const storedTheme = localStorage.getItem('theme');
+            if (storedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeSwitcher.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        }
+        
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('blogUsers', JSON.stringify(users));
+            localStorage.setItem('blogs', JSON.stringify(blogs));
+            if (currentUser) {
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            } else {
+                localStorage.removeItem('currentUser');
+            }
+        }
+        
+        // Set up event listeners
+        function setupEventListeners() {
+            // Navigation
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    showPage(page);
+                    
+                    // Update active nav link
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                });
+            });
+            
+            // Auth form toggle
+            document.getElementById('switchForm').addEventListener('click', toggleAuthForm);
+            
+            // Auth form submission
+            document.getElementById('authForm').addEventListener('submit', handleAuth);
+            
+            // Login button
+            document.getElementById('loginBtn').addEventListener('click', () => {
+                showPage('auth');
+                navLinks.forEach(l => l.classList.remove('active'));
+            });
+            
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            
+            // Create blog button
+            document.getElementById('createBlogBtn').addEventListener('click', () => {
+                if (currentUser) {
+                    showPage('create');
+                    navLinks.forEach(l => l.classList.remove('active'));
+                } else {
+                    showPage('auth');
+                }
+            });
+            
+            // Blog form submission
+            document.getElementById('blogForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const title = document.getElementById('blogTitle').value;
+                const content = document.getElementById('blogContent').value;
+                const imageUrl = document.getElementById('blogImage').value;
+                
+                if (title && content) {
+                    // Create new blog
+                    const newBlog = {
+                        id: Date.now(),
+                        title: title,
+                        imageUrl: imageUrl || '',
+                        excerpt: content.substring(0, 150) + '...',
+                        content: `<p>${content.replace(/\n/g, '</p><p>')}</p>`,
+                        author: currentUser.name,
+                        authorId: currentUser.id,
+                        date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+                        readTime: `${Math.ceil(content.split(' ').length / 200)} min read`,
+                        views: 0,
+                        likes: 0,
+                        likedBy: []
+                    };
+                    
+                    blogs.unshift(newBlog);
+                    saveData();
+                    
+                    // Render updated lists
+                    renderBlogList('#homeBlogList', blogs);
+                    renderBlogList('#publicBlogList', blogs);
+                    renderBlogList('#dashboardBlogList', blogs.filter(blog => blog.authorId === currentUser.id));
+                    
+                    // Update dashboard stats
+                    updateDashboardStats();
+                    
+                    // Show dashboard
+                    showPage('dashboard');
+                    
+                    // Reset form
+                    document.getElementById('blogForm').reset();
+                } else {
+                    document.getElementById('blogError').textContent = 'Please fill in all required fields';
+                    document.getElementById('blogError').style.display = 'block';
+                }
+            });
+            
+            // Cancel create blog
+            document.getElementById('cancelCreate').addEventListener('click', () => {
+                showPage('home');
+                navLinks.forEach(l => {
+                    if (l.getAttribute('data-page') === 'home') l.classList.add('active');
+                });
+            });
+            
+            // Back to list from detail
+            document.getElementById('backToList').addEventListener('click', () => {
+                showPage('home');
+                navLinks.forEach(l => {
+                    if (l.getAttribute('data-page') === 'home') l.classList.add('active');
+                });
+            });
+            
+            // Edit blog button
+            document.getElementById('editBlogBtn').addEventListener('click', () => {
+                if (currentBlog && currentUser && currentBlog.authorId === currentUser.id) {
+                    document.getElementById('blogTitle').value = currentBlog.title;
+                    document.getElementById('blogImage').value = currentBlog.imageUrl || '';
+                    document.getElementById('blogContent').value = currentBlog.content.replace(/<\/?p>/g, '\n').trim();
+                    showPage('create');
+                }
+            });
+            
+            // Delete blog button
+            document.getElementById('deleteBlogBtn').addEventListener('click', () => {
+                if (currentBlog && currentUser && currentBlog.authorId === currentUser.id) {
+                    if (confirm('Are you sure you want to delete this blog?')) {
+                        blogs = blogs.filter(blog => blog.id !== currentBlog.id);
+                        saveData();
+                        
+                        // Render updated lists
+                        renderBlogList('#homeBlogList', blogs);
+                        renderBlogList('#publicBlogList', blogs);
+                        renderBlogList('#dashboardBlogList', blogs.filter(blog => blog.authorId === currentUser.id));
+                        
+                        // Update dashboard stats
+                        updateDashboardStats();
+                        
+                        // Go back to home
+                        showPage('home');
+                        navLinks.forEach(l => {
+                            if (l.getAttribute('data-page') === 'home') l.classList.add('active');
+                        });
+                    }
+                }
+            });
+            
+            // Search functionality
+            document.getElementById('searchBtn').addEventListener('click', performSearch);
+            document.getElementById('searchInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') performSearch();
+            });
+            
+            // Like button in detail view
+            document.getElementById('likeDetailBtn').addEventListener('click', handleLike);
+        }
+        
+        // Perform search
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            let filteredBlogs = blogs;
+            
+            if (searchTerm) {
+                filteredBlogs = blogs.filter(blog => 
+                    blog.title.toLowerCase().includes(searchTerm) ||
+                    blog.author.toLowerCase().includes(searchTerm) ||
+                    blog.excerpt.toLowerCase().includes(searchTerm) ||
+                    blog.content.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            renderBlogList('#publicBlogList', filteredBlogs);
+        }
+        
+        // Handle like action
+        function handleLike() {
+            if (!currentUser) {
+                showPage('auth');
+                return;
+            }
+            
+            const blogId = currentBlog.id;
+            const userId = currentUser.id;
+            const blog = blogs.find(b => b.id === blogId);
+            
+            if (!blog) return;
+            
+            // Toggle like status
+            const userIndex = blog.likedBy.indexOf(userId);
+            if (userIndex === -1) {
+                // Add like
+                blog.likedBy.push(userId);
+                blog.likes++;
+            } else {
+                // Remove like
+                blog.likedBy.splice(userIndex, 1);
+                blog.likes--;
+            }
+            
+            saveData();
+            
+            // Update UI
+            const likeBtn = document.getElementById('likeDetailBtn');
+            const likeCount = document.getElementById('likeCount');
+            likeCount.textContent = blog.likes;
+            
+            // Update button style
+            if (blog.likedBy.includes(userId)) {
+                likeBtn.classList.add('liked');
+                likeBtn.innerHTML = `<i class="fas fa-heart"></i> ${blog.likes} likes`;
+            } else {
+                likeBtn.classList.remove('liked');
+                likeBtn.innerHTML = `<i class="far fa-heart"></i> ${blog.likes} likes`;
+            }
+            
+            // Update all blog lists
+            renderBlogList('#homeBlogList', blogs);
+            renderBlogList('#publicBlogList', blogs);
+            if (currentUser) {
+                renderBlogList('#dashboardBlogList', blogs.filter(b => b.authorId === currentUser.id));
+            }
+        }
+        
+        // Show a specific page and hide others
+        function showPage(pageName) {
+            // Hide all pages
+            Object.keys(pages).forEach(key => {
+                pages[key].classList.remove('active');
+            });
+            
+            // Show requested page
+            pages[pageName].classList.add('active');
+            
+            // Update UI based on auth state
+            updateAuthUI();
+        }
+        
+        // Toggle between login and register forms
+        function toggleAuthForm() {
+            const isLogin = document.getElementById('loginFields').style.display !== 'none';
+            const loginFields = document.getElementById('loginFields');
+            const registerFields = document.getElementById('registerFields');
+            const formTitle = document.getElementById('formTitle');
+            const submitBtn = document.getElementById('submitBtn');
+            const switchText = document.getElementById('switchForm');
+            
+            if (isLogin) {
+                // Switch to register
+                loginFields.style.display = 'none';
+                registerFields.style.display = 'block';
+                formTitle.textContent = 'Create an account';
+                submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Register';
+                switchText.textContent = "Already have an account? Login";
+            } else {
+                // Switch to login
+                loginFields.style.display = 'block';
+                registerFields.style.display = 'none';
+                formTitle.textContent = 'Login to your account';
+                submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+                switchText.textContent = "Don't have an account? Register";
+            }
+            
+            // Clear error message
+            document.getElementById('authError').style.display = 'none';
+        }
+        
+        // Handle authentication
+        function handleAuth(e) {
+            e.preventDefault();
+            const authError = document.getElementById('authError');
+            authError.style.display = 'none';
+            
+            const isLogin = document.getElementById('loginFields').style.display !== 'none';
+            
+            if (isLogin) {
+                // Login logic
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                if (email && password) {
+                    // Find user
+                    const user = users.find(u => u.email === email && u.password === password);
+                    
+                    if (user) {
+                        currentUser = user;
+                        saveData();
+                        
+                        showPage('dashboard');
+                        updateAuthUI();
+                        
+                        // Update welcome message
+                        document.getElementById('welcomeMessage').textContent = `Welcome back, ${currentUser.name}!`;
+                        
+                        // Render user's blogs
+                        renderBlogList('#dashboardBlogList', blogs.filter(blog => blog.authorId === currentUser.id));
+                        
+                        // Update dashboard stats
+                        updateDashboardStats();
+                    } else {
+                        authError.textContent = 'Invalid email or password';
+                        authError.style.display = 'block';
+                    }
+                } else {
+                    authError.textContent = 'Please enter both email and password';
+                    authError.style.display = 'block';
+                }
+            } else {
+                // Register logic
+                const username = document.getElementById('registerUsername').value;
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+                
+                if (username && email && password) {
+                    // Check if email already exists
+                    if (users.some(u => u.email === email)) {
+                        authError.textContent = 'Email already registered';
+                        authError.style.display = 'block';
+                        return;
+                    }
+                    
+                    // Create new user
+                    const newUser = {
+                        id: Date.now(),
+                        name: username,
+                        email: email,
+                        password: password
+                    };
+                    
+                    users.push(newUser);
+                    currentUser = newUser;
+                    saveData();
+                    
+                    showPage('dashboard');
+                    updateAuthUI();
+                    
+                    // Update welcome message
+                    document.getElementById('welcomeMessage').textContent = `Welcome, ${currentUser.name}!`;
+                } else {
+                    authError.textContent = 'Please fill all fields';
+                    authError.style.display = 'block';
+                }
+            }
+        }
+        
+        // Logout user
+        function logout() {
+            currentUser = null;
+            saveData();
+            showPage('home');
+            updateAuthUI();
+            
+            // Reset auth form to login
+            if (document.getElementById('loginFields').style.display === 'none') {
+                toggleAuthForm();
+            }
+            
+            // Reset active nav link
+            navLinks.forEach(l => {
+                if (l.getAttribute('data-page') === 'home') l.classList.add('active');
+            });
+        }
+        
+        // Update UI based on authentication state
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const createBtn = document.getElementById('createBlogBtn');
+            
+            if (currentUser) {
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'block';
+                createBtn.textContent = 'Create Blog';
+            } else {
+                loginBtn.style.display = 'block';
+                logoutBtn.style.display = 'none';
+                createBtn.textContent = 'Login to Create Blog';
+            }
+        }
+        
+        // Render blog list
+        function renderBlogList(selector, blogList) {
+            const container = document.querySelector(selector);
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            blogList.forEach(blog => {
+                const isAuthor = currentUser && currentUser.id === blog.authorId;
+                const isDashboard = selector === '#dashboardBlogList';
+                const isLiked = currentUser && blog.likedBy && blog.likedBy.includes(currentUser.id);
+                
+                const blogCard = document.createElement('div');
+                blogCard.className = 'blog-card';
+                blogCard.innerHTML = `
+                    <div class="blog-img" style="${blog.imageUrl ? `background-image: url('${blog.imageUrl}')` : ''}">
+                        ${blog.imageUrl ? '' : blog.title.substring(0, 2)}
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-author">
+                                <i class="fas fa-user"></i> ${blog.author}
+                            </span>
+                            <span>${blog.date}</span>
+                        </div>
+                        <h3 class="blog-title">${blog.title}</h3>
+                        <p class="blog-excerpt">${blog.excerpt}</p>
+                        <div class="blog-meta">
+                            <span><i class="fas fa-clock"></i> ${blog.readTime}</span>
+                            <span><i class="fas fa-eye"></i> ${blog.views} views</span>
+                        </div>
+                        <div class="like-container">
+                            <button class="like-btn ${isLiked ? 'liked' : ''}">
+                                <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i> 
+                                <span class="like-count">${blog.likes}</span> likes
+                            </button>
+                            ${isDashboard ? `
+                            <div class="blog-actions">
+                                <button class="action-btn edit">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="action-btn delete">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                // Add click event to view detail
+                blogCard.addEventListener('click', (e) => {
+                    if (!e.target.closest('.blog-actions') && !e.target.closest('.like-btn')) {
+                        currentBlog = blog;
+                        
+                        // Increment view count
+                        blog.views++;
+                        saveData();
+                        
+                        // Update UI
+                        document.getElementById('detailTitle').textContent = blog.title;
+                        document.getElementById('detailMeta').innerHTML = `
+                            <span><i class="fas fa-user"></i> ${blog.author}</span>
+                            <span><i class="fas fa-calendar"></i> ${blog.date}</span>
+                            <span><i class="fas fa-clock"></i> ${blog.readTime}</span>
+                            <span><i class="fas fa-eye"></i> ${blog.views} views</span>
+                        `;
+                        document.getElementById('detailContent').innerHTML = blog.content;
+                        
+                        // Update like button
+                        const isLiked = currentUser && blog.likedBy && blog.likedBy.includes(currentUser.id);
+                        const likeBtn = document.getElementById('likeDetailBtn');
+                        const likeCount = document.getElementById('likeCount');
+                        likeCount.textContent = blog.likes;
+                        
+                        if (isLiked) {
+                            likeBtn.classList.add('liked');
+                            likeBtn.innerHTML = `<i class="fas fa-heart"></i> ${blog.likes} likes`;
+                        } else {
+                            likeBtn.classList.remove('liked');
+                            likeBtn.innerHTML = `<i class="far fa-heart"></i> ${blog.likes} likes`;
+                        }
+                        
+                        // Show/hide edit/delete buttons
+                        const detailActions = document.getElementById('detailActions');
+                        if (currentUser && currentUser.id === blog.authorId) {
+                            detailActions.style.display = 'flex';
+                        } else {
+                            detailActions.style.display = 'none';
+                        }
+                        
+                        showPage('detail');
+                    }
+                });
+                
+                // Add click event to like button
+                const likeBtn = blogCard.querySelector('.like-btn');
+                likeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    
+                    if (!currentUser) {
+                        showPage('auth');
+                        return;
+                    }
+                    
+                    const blogId = blog.id;
+                    const userId = currentUser.id;
+                    
+                    // Toggle like status
+                    const userIndex = blog.likedBy.indexOf(userId);
+                    if (userIndex === -1) {
+                        // Add like
+                        blog.likedBy.push(userId);
+                        blog.likes++;
+                    } else {
+                        // Remove like
+                        blog.likedBy.splice(userIndex, 1);
+                        blog.likes--;
+                    }
+                    
+                    saveData();
+                    
+                    // Update UI
+                    const likeCount = blogCard.querySelector('.like-count');
+                    likeCount.textContent = blog.likes;
+                    
+                    if (blog.likedBy.includes(userId)) {
+                        likeBtn.classList.add('liked');
+                        likeBtn.innerHTML = `<i class="fas fa-heart"></i> ${blog.likes} likes`;
+                    } else {
+                        likeBtn.classList.remove('liked');
+                        likeBtn.innerHTML = `<i class="far fa-heart"></i> ${blog.likes} likes`;
+                    }
+                });
+                
+                // Add click event to edit button (only in dashboard)
+                if (isDashboard) {
+                    const editBtn = blogCard.querySelector('.action-btn.edit');
+                    editBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        currentBlog = blog;
+                        document.getElementById('blogTitle').value = blog.title;
+                        document.getElementById('blogImage').value = blog.imageUrl || '';
+                        document.getElementById('blogContent').value = blog.content.replace(/<\/?p>/g, '\n').trim();
+                        showPage('create');
+                    });
+                    
+                    // Add click event to delete button (only in dashboard)
+                    const deleteBtn = blogCard.querySelector('.action-btn.delete');
+                    deleteBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (confirm('Are you sure you want to delete this blog?')) {
+                            blogs = blogs.filter(b => b.id !== blog.id);
+                            saveData();
+                            renderBlogList(selector, blogList.filter(b => b.id !== blog.id));
+                            renderBlogList('#homeBlogList', blogs);
+                            renderBlogList('#publicBlogList', blogs);
+                            
+                            if (selector === '#dashboardBlogList') {
+                                renderBlogList('#dashboardBlogList', blogs.filter(b => b.authorId === currentUser.id));
+                            }
+                            
+                            updateDashboardStats();
+                        }
+                    });
+                }
+                
+                container.appendChild(blogCard);
+            });
+        }
+        
+        // Update dashboard stats
+        function updateDashboardStats() {
+            if (currentUser) {
+                const userBlogs = blogs.filter(blog => blog.authorId === currentUser.id);
+                const totalViews = userBlogs.reduce((sum, blog) => sum + blog.views, 0);
+                const totalLikes = userBlogs.reduce((sum, blog) => sum + blog.likes, 0);
+                
+                document.getElementById('totalBlogs').textContent = userBlogs.length;
+                document.getElementById('totalViews').textContent = totalViews;
+                document.getElementById('totalLikes').textContent = totalLikes;
+            }
+        }
+        
+        // Toggle theme
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            if (document.body.classList.contains('dark-theme')) {
+                themeSwitcher.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeSwitcher.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>
